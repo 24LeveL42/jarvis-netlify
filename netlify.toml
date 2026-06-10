@@ -1,0 +1,8 @@
+[build]
+  functions = "netlify/functions"
+  publish = "."
+
+[[redirects]]
+  from = "/api/jarvis"
+  to = "/.netlify/functions/jarvis"
+  status = 200
