@@ -708,10 +708,34 @@ async function send(){
     history.push({role:'assistant', content:reply});
     showTyping(false);
     addMsg('j', reply);
+    speakJarvis(reply);
   }catch(e){
     showTyping(false);
     addMsg('j','Communications offline, sir.');
   }
+}
+
+// ── JARVIS SPEAK ──
+function speakJarvis(text){
+  if(!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.rate = 0.95;
+  utter.pitch = 0.85;
+  utter.volume = 1;
+  const voices = window.speechSynthesis.getVoices();
+  const preferred = voices.find(v =>
+    v.name.includes('Daniel') ||
+    v.name.includes('Google UK English Male') ||
+    v.name.includes('English United Kingdom') ||
+    (v.lang === 'en-GB' && v.name.toLowerCase().includes('male'))
+  );
+  if(preferred) utter.voice = preferred;
+  else {
+    const enGB = voices.find(v => v.lang === 'en-GB');
+    if(enGB) utter.voice = enGB;
+  }
+  window.speechSynthesis.speak(utter);
 }
 
 // ── VOICE ──
